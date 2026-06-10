@@ -464,13 +464,13 @@ static FSoundID S_AddSound (const char *logicalname, int lumpnum, FScanner *sc)
 		if (sc)
 		{
 			DPrintf(DMSG_WARNING, PRINT_NONOTIFY,
-			        TEXTCOLOR_ORANGE "%s - invalid sound at line %d: " TEXTCOLOR_WHITE "%s\n", sc->ScriptName,
-			        sc->GetMessageLine(), logicalname);
+				TEXTCOLOR_ORANGE "%s - invalid sound at line %d: " TEXTCOLOR_WHITE "%s\n",
+				sc->ScriptName.GetChars(), sc->GetMessageLine(), logicalname);
 		}
 		else
 		{
 			DPrintf(DMSG_WARNING, PRINT_NONOTIFY, TEXTCOLOR_ORANGE "Invalid Sound: " TEXTCOLOR_WHITE "%s\n",
-			        logicalname);
+				logicalname);
 		}
 	}
 
