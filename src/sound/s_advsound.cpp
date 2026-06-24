@@ -410,6 +410,19 @@ DEFINE_ACTION_FUNCTION(DObject,S_GetLength)
 FSoundID S_AddSound (const char *logicalname, const char *lumpname, FScanner *sc)
 {
 	int lump = fileSystem.CheckNumForFullName (lumpname, true, ns_sounds);
+
+	if (developer >= DMSG_WARNING && lump <= -1)
+	{
+		if (sc)
+			Printf(PRINT_NONOTIFY,
+			       TEXTCOLOR_ORANGE "%s, " TEXTCOLOR_WHITE "%s" TEXTCOLOR_ORANGE " - Lump doesn't exist: " TEXTCOLOR_WHITE "%s\n",
+			       sc->ScriptName.GetChars(), logicalname, lumpname);
+		else
+			Printf(PRINT_NONOTIFY,
+			       TEXTCOLOR_WHITE "%s" TEXTCOLOR_ORANGE " - Lump doesn't exist: " TEXTCOLOR_WHITE "%s\n",
+			       logicalname, lumpname);
+	}
+
 	return S_AddSound (logicalname, lump, sc);
 }
 
@@ -457,21 +470,6 @@ static FSoundID S_AddSound (const char *logicalname, int lumpnum, FScanner *sc)
 	else
 	{ // Otherwise, create a new definition.
 		sfxid = soundEngine->AddSoundLump (logicalname, lumpnum, CurrentPitchMask);
-	}
-
-	if (!soundEngine->isValidSoundId(sfxid))
-	{
-		if (sc)
-		{
-			DPrintf(DMSG_WARNING, PRINT_NONOTIFY,
-				TEXTCOLOR_ORANGE "%s - invalid sound at line %d: " TEXTCOLOR_WHITE "%s\n",
-				sc->ScriptName.GetChars(), sc->GetMessageLine(), logicalname);
-		}
-		else
-		{
-			DPrintf(DMSG_WARNING, PRINT_NONOTIFY, TEXTCOLOR_ORANGE "Invalid Sound: " TEXTCOLOR_WHITE "%s\n",
-				logicalname);
-		}
 	}
 
 	return sfxid;
