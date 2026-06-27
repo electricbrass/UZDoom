@@ -484,11 +484,18 @@ static FSoundID S_AddSound (const char *logicalname, int lumpnum, FScanner *sc)
 
 FSoundID S_AddPlayerSound (const char *pclass, int gender, FSoundID refid, const char *lumpname)
 {
-	int lump=-1;
+	int lump = -1;
 
 	if (lumpname)
 	{
 		lump = fileSystem.CheckNumForFullName (lumpname, true, ns_sounds);
+
+		if (developer >= DMSG_WARNING && lump <= -1)
+		{
+			Printf(PRINT_NONOTIFY,
+			       TEXTCOLOR_ORANGE "Player sound " TEXTCOLOR_WHITE "%s, %s" TEXTCOLOR_ORANGE " - Lump doesn't exist: " TEXTCOLOR_WHITE "%s\n",
+			       pclass, soundEngine->GetSfx(refid)->name.GetChars(), lumpname);
+		}
 	}
 
 	return S_AddPlayerSound (pclass, gender, refid, lump);
